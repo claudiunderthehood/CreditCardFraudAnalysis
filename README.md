@@ -12,6 +12,8 @@ Docker is crucial for this pipeline, so make sure to install it before running e
 In order to run the pipeline, start docker. Then open 7 terminals and go to the "bin/" directory. In here you'll need to run:
 
 ```bash
+./tapInit.sh
+
 ./kafkaStartZK.sh
 
 ./kafkaStartServer.sh
