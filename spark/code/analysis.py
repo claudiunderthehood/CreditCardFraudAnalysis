@@ -18,7 +18,7 @@ sc = SparkContext(appName="transactionsAnalysis")
 spark = SparkSession(sc)
 sc.setLogLevel("WARN")
 
-#training classification model
+
 file="/opt/tap/spark/dataset/transactions.csv"
 print("-------------- \n Start:\n")
 
@@ -73,9 +73,9 @@ def get_spark_session():
     sc = SparkContext.getOrCreate(conf=sparkConf)
 
 
-print("************************ \n Es mapping and connection\n")
+print("--------------------- \n Es setup\n")
 
-#Processing data
+
 kafkaServer="10.0.100.23:9092"
 topic = "transactions"
 
@@ -121,8 +121,7 @@ def process(batch_df: DataFrame, batch_id: int):
 
 
 print("----------------------- \n Creating a kafka source\n")
-#creating a kafka source
-#streaming query
+
 df = spark \
   .readStream \
   .format("kafka") \
@@ -132,7 +131,8 @@ df = spark \
 
 
 print("------------------------ \nTaking data from kafka\n")
-#batch queries
+
+
 df.selectExpr("CAST(value AS STRING)") \
     .select(from_json("value", dataKafka).alias("data")) \
     .select("data.*") \
