@@ -1,0 +1,97 @@
+version: '3.7'
+
+services:
+
+  zookeeper:
+    image: tap:kafka
+    container_name: kafkaZK
+    environment:
+      - KAFKA_ACTION=start-zk
+    ports:  
+      - 2181:2181
+    networks: 
+      tap:
+        ipv4_address: 10.0.100.22
+  
+  kafkaServer:
+    image: tap:kafka
+    container_name: kafkaServer
+    environment:
+      - KAFKA_ACTION=start-kafka
+    ports:
+      - 9092:9092
+    networks: 
+      tap:
+        ipv4_address: 10.0.100.23
+    depends_on:
+      - zookeeper
+  
+  elasticsearch:
+    container_name: elasticsearch
+    hostname: elasticsearch
+    image: tap:elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"      
+    environment:
+      - node.name=elasticsearch
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms750m -Xmx750m"
+    networks: 
+      tap:
+        ipv4_address: 10.0.100.51
+
+  kibana:
+    container_name: kibana
+    image: tap:kibana
+    hostname: kibana
+
+    depends_on:
+      - elasticsearch
+    ports:
+      - 5601:5601
+
+    networks: 
+      tap:
+        ipv4_address: 10.0.100.52
+  
+  spark:
+    image: tap:spark
+    container_name: spark
+    environment:
+      - SPARK_ACTION=spark-submit-python
+    networks:
+      - tap
+    ports:
+      - 4040:4040
+    depends_on:
+      - kafkaServer
+    command: analysis.py org.apache.spark:spark-sql-kafka-0-10_2.12:3.1.1,org.elasticsearch:elasticsearch-spark-30_2.12:7.12.1 
+
+  logstash:
+    image: tap:logstash 
+    container_name: logstash 
+    networks: 
+      - tap
+    depends_on:
+        - kafkaServer
+    ports:
+      - "5044:5044"
+  
+  generator:
+    image: tap:generator
+    container_name: generator
+    networks:
+      - tap
+    depends_on:
+      - logstash
+    entrypoint: /bin/bash -c "sleep 60 && python generator.py"
+
+networks:
+  tap:
+    name: tap
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.100.1/24
