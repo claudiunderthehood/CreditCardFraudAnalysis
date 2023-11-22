@@ -17,7 +17,7 @@ In order to run the pipeline, start docker. Then go to the "bin/" directory and 
 ./setup.sh
 ```
 
-After doing so, go do the root directory of the project and execute:
+After doing so, go to the root directory of the project and execute:
 
 ```bash
 docker-compose up -d
