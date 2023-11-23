@@ -13,9 +13,18 @@ Docker is crucial for this pipeline, so make sure to install it before running e
 
 In order to run the pipeline, start docker. Then go to the "bin/" directory and run:
 
+if you are on Linux:
+
 ```bash
 ./setup.sh
 ```
+
+if you're on MacOS:
+
+```bash
+sh setup.sh
+```
+If you're on Windows, click the "setup.cmd" file.
 
 After doing so, go to the root directory of the project and execute:
 
