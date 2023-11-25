@@ -35,9 +35,11 @@ def gen():
 
         transactions_df = add_frauds(customer_profiles_table, terminal_profiles_table, transactions_df)
 
+        transactions_df = transactions_df.drop("TX_TIME_DAYS", axis=1)
+
         transactions_df.rename(columns={"TRANSACTION_ID": "V0", "TX_DATETIME": "V1", "CUSTOMER_ID": "V2", "TERMINAL_ID": "V3",
-                                        "TX_AMOUNT": "V4", "TX_TIME_SECONDS": "V5", "TX_TIME_DAYS": "V6", "TX_FRAUD": "V7", 
-                                        "TX_FRAUD_SCENARIO": "V8"}, inplace=True)
+                                        "TX_AMOUNT": "V4", "TX_TIME_SECONDS": "V5", "TX_FRAUD": "V6", 
+                                        "TX_FRAUD_SCENARIO": "V7"}, inplace=True)
 
         json_data = transactions_df.to_json(orient='records')
 
