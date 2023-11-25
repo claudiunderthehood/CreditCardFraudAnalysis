@@ -1,6 +1,6 @@
 # Credit card fraud analysis
 
-This project is meant to analyse in real time, every day transactions in order to detect frauds within transactions through linear regression. The whole data is processed through a pipeline which features: Logstash, Kafka, 
+This project is meant to analyse every day transactions in order to detect frauds within transactions through linear regression. The whole data is processed through a pipeline which features: Logstash, Kafka, 
 Spark, Elasticsearch and Kibana.
 
 ![Pipeline](pics/pipeline.png)
