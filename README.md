@@ -34,3 +34,5 @@ docker-compose up -d
 
 The generator has a timeout of 60 seconds so that the other containers have time to fully start. When the data has been sent and elaborated have fun with kibana(http://localhost:5601) :)
 
+![Dashboard](pics/graphs.png)
+
