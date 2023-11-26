@@ -39,8 +39,9 @@ schema= tp.StructType([
 train_set = spark.read.csv(file, header=True, schema=schema, sep=",")
 
 train_set = train_set.drop("TX_TIME_DAYS")
+train_set = train_set.drop("TX_FRAUD_SCENARIO")
 
-input_features=['TX_AMOUNT','TX_FRAUD', 'TX_FRAUD_SCENARIO']
+input_features=['TX_AMOUNT','TX_FRAUD']
 
 assembler = VectorAssembler(inputCols=input_features, outputCol='features')
 
@@ -91,7 +92,7 @@ dataKafka = tp.StructType([
     tp.StructField(name= 'TX_AMOUNT', dataType= tp.DoubleType(),  nullable= True),
     tp.StructField(name= 'TX_TIME_SECONDS', dataType= tp.IntegerType(),  nullable= True),
     tp.StructField(name= 'TX_FRAUD', dataType= tp.DoubleType(),  nullable= True),
-    tp.StructField(name= 'TX_FRAUD_SCENARIO', dataType= tp.IntegerType(),  nullable= True),
+    tp.StructField(name= 'TX_DURING_NIGHT', dataType= tp.IntegerType(),  nullable= True),
     tp.StructField(name= '@timestamp', dataType= tp.TimestampType(),  nullable= True)
 ])
 
@@ -108,7 +109,7 @@ def process(batch_df: DataFrame, batch_id: int):
 
         print("--------------------- \nSending data to ES \n")
         data2.select("TRANSACTION_ID", "TX_DATETIME", "CUSTOMER_ID", "TERMINAL_ID", "TX_AMOUNT",
-                     "TX_TIME_SECONDS", "@timestamp", "prediction") \
+                     "TX_TIME_SECONDS", "TX_DURING_NIGHT", "@timestamp", "prediction") \
         .write \
         .format("org.elasticsearch.spark.sql") \
         .mode('append') \
