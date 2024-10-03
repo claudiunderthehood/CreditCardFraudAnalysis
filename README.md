@@ -36,3 +36,7 @@ The generator has a timeout of 60 seconds so that the other containers have time
 
 ![Dashboard](pics/graphs.png)
 
+## Citation and Licensing
+
+The idea behind the codebase for the data generator and feature transformation is inspired by the **Machine Learning Group (Université Libre de Bruxelles - ULB).** You can find the original source code at the following link:  
+[Transaction Generator Handbook - Chapter 3](https://github.com/Fraud-Detection-Handbook/fraud-detection-handbook/tree/main/Chapter_3_GettingStarted)
